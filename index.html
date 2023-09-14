@@ -3,9 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Developer Terminal</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #0F0;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+        }
+        #terminal {
+            width: 100%;
+            height: 90vh;
+            overflow: auto;
+            padding: 0;
+            
+        }
+        #inputField {
+            outline: none;
+            border: none;
+            background-color: #000;
+            color: #0F0;
+            width: auto;
+            font-family: 'Courier New', monospace;
+            font-size: inherit;
+        }
+        
+        #outputList .input{
+            margin: 10px 0 0 0;
+        }
+        #outputList .output{
+            margin: 0 0 10px 0;
+        }
+        
+
+        
+    </style>
 </head>
 <body>
-    
+    <div id="terminal">
+        <p id="outputList"></p>
+        <span><span id="promptStart"></span><input id="inputField" type="text" list="commands" autofocus></span>
+    </div>
+    <div id="api-playground" style="display: none;"></div>
+    <div id="server-status" style="display: none;"></div>
+    <footer style="color: #0F0;">
+        <p>Follow me on <a href="https://github.com/bukomp" target="_blank" style="color: #0F0;">GitHub</a> and <a href="https://twitter.com/username" target="_blank" style="color: #0F0;">Twitter</a></p>
+    </footer>
 </body>
+<script>
+    // script must go here
+
+   
+    
+</script>
+<script src="terminal.js"></script>
 </html>
