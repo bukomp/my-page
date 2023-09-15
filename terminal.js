@@ -26,8 +26,8 @@ function clearTerminal() {
   return 'Terminal cleared!';
 }
 
-function echoInput(input) {
-  return input;
+function echoInput(...input) {
+  return input.join(' ');
 }
 
 function exitWindow() {
@@ -46,9 +46,15 @@ function executeCommand(input, output) {
   const inputElement = createNewElement('p', `$ ${input}`);
   let commandOutput = 'Command not found';
 
-  if (commands.hasOwnProperty(input)) {
-    const command = commands[input];
-    commandOutput = typeof command === 'function' ? command(input) : command;
+  const commandInput = input.split(' ')[0];
+  const properties = input.split(' ');
+
+  if (commands.hasOwnProperty(commandInput)) {
+    console.log(commandInput, properties);
+    properties.shift();
+    const command = commands[commandInput];
+    commandOutput =
+      typeof command === 'function' ? command(...properties) : command;
   }
 
   const outputElement = createNewElement('p', commandOutput);
@@ -155,14 +161,18 @@ function initialize() {
     cursor.style.left = `${inputField.value.length * 1.12}ch`;
   });
 
-  // Make cursor flash with white background when inputting is activated
-  inputField.addEventListener('focus', () => {
-    cursor.style.animation = 'none';
-  });
+  //// Make cursor flash with white background when inputting is activated
+  //inputField.addEventListener('focus', () => {
+  //  cursor.style.animation = 'none';
+  //});
+  //
+  //// Stop cursor from flashing and remove white background when inputting is deactivated
+  //inputField.addEventListener('blur', () => {
+  //  cursor.style.animation = 'blink 1.3s step-end infinite';
+  //});
 
-  // Stop cursor from flashing and remove white background when inputting is deactivated
-  inputField.addEventListener('blur', () => {
-    cursor.style.animation = 'blink 1.3s step-end infinite';
+  terminal.addEventListener('click', () => {
+    inputField.focus();
   });
 }
 
