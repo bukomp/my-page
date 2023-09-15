@@ -1,0 +1,93 @@
+/* width */
+#terminal ::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+#terminal ::-webkit-scrollbar-track {
+  --dotSize: 0.05px;
+  --bgSize: 2px;
+  --bgPosition: 0;
+  background-image: radial-gradient(
+    circle at center,
+    #00ba00 var(--dotSize),
+    transparent 0
+  );
+  background-size: var(--bgSize) var(--bgSize);
+  background-position: 0 0, var(--bgPosition) var(--bgPosition);
+}
+
+/* Handle */
+#terminal ::-webkit-scrollbar-thumb {
+  background: #0f0;
+}
+
+#terminal {
+  width: 100%;
+  height: 90vh;
+  overflow: auto;
+  padding: 0;
+  text-shadow: 0 0 1px white, 0px 0px 6px #ffffff;
+  font-family: 'VT323', monospace;
+  letter-spacing: 1.3px;
+  cursor: url(cursor-min.png) 9 9, auto;
+}
+
+#inputLine {
+  white-space: nowrap;
+  display: block;
+  text-overflow: ellipsis;
+  caret-color: transparent;
+  letter-spacing: inherit;
+  letter-spacing: inherit;
+}
+
+#inputField:hover {
+  cursor: url(cursor-min-text.png) 13 18, auto;
+}
+
+#inputField {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  color: #0f0;
+  font-family: inherit;
+  font-size: inherit;
+  text-shadow: inherit;
+  letter-spacing: inherit;
+  padding: 0;
+  margin-bottom: 15px;
+  text-emphasis: none;
+  text-decoration: none;
+  cursor: url(cursor-min.png) 9 9, auto;
+}
+
+#outputList {
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+#outputList .input {
+  margin: 10px 0 0 0;
+}
+#outputList .output {
+  margin: 0 0 10px 0;
+}
+
+#cursor {
+  position: relative;
+  width: 5px;
+  height: 0.92rem;
+  box-shadow: 0 0 1px white, 0px 0px 6px #ffffff;
+  transform: translate(179px, -31px);
+  background-color: #00ff00;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}

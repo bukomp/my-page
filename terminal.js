@@ -1,10 +1,13 @@
+const inputField = document.getElementById('inputField');
+const cursor = document.getElementById('cursor');
+
 const getCommandHistory = () =>
   JSON.parse(localStorage.getItem('commandHistory')) || [];
+
 let commandHistory = getCommandHistory();
 let outputHistory = [];
 let historyIndex = commandHistory.length;
 
-// Define the commands object
 const commands = {
   help: 'List of commands: help, clear, echo, exit',
   clear: '',
@@ -12,81 +15,100 @@ const commands = {
   exit: () => window.close(),
 };
 
-const handleEnterKey = (input, output) => {
-  // Only save non-empty commands to history
-  if (input !== '') {
-    commandHistory.push(input);
-    localStorage.setItem('commandHistory', JSON.stringify(commandHistory));
-    historyIndex = commandHistory.length;
-  }
+function saveCommandToHistory(input) {
+  commandHistory.push(input);
+  localStorage.setItem('commandHistory', JSON.stringify(commandHistory));
+  historyIndex = commandHistory.length;
+}
 
-  // Create new elements for input and output
-  let inputElement = document.createElement('p');
-  let outputElement = document.createElement('p');
-
-  // Set the text of the input element
-  inputElement.textContent = `$ ${input}`;
+function executeCommand(input, output) {
+  const inputElement = createNewElement('p', `$ ${input}`);
+  let commandOutput = 'Command not found';
 
   if (commands.hasOwnProperty(input)) {
     const command = commands[input];
-    if (typeof command === 'function') {
-      const commandOutput = command(input);
-      outputElement.textContent = commandOutput;
-    } else {
-      outputElement.textContent = command;
-    }
-  } else {
-    outputElement.textContent = 'Command not found';
+    commandOutput = typeof command === 'function' ? command(input) : command;
   }
 
-  // Append the new elements to the output
+  const outputElement = createNewElement('p', commandOutput);
+  appendElementsToOutput(output, inputElement, outputElement);
+  outputHistory.push(outputElement.textContent);
+}
 
+function createNewElement(tag, text) {
+  const element = document.createElement(tag);
+  element.textContent = text;
+  return element;
+}
+
+function appendElementsToOutput(output, inputElement, outputElement) {
   output.appendChild(inputElement).classList.add('input');
   output.appendChild(outputElement).classList.add('output');
+}
 
-  // Save the output to history
-  outputHistory.push(outputElement.textContent);
-};
-
-const handleArrowUpKey = (input) => {
+function navigateHistoryUp(input) {
   if (historyIndex > 0) {
     historyIndex--;
     input.value = commandHistory[historyIndex];
   }
-};
+}
 
-const handleArrowDownKey = (input) => {
+function navigateHistoryDown(input) {
   if (historyIndex < commandHistory.length - 1) {
     historyIndex++;
     input.value = commandHistory[historyIndex];
   } else {
     input.value = '';
   }
-};
+}
 
-document.getElementById('inputField').addEventListener('keydown', (e) => {
+inputField.addEventListener('keydown', (e) => {
   const input = e.target.value.trim();
   const output = document.getElementById('outputList');
 
   if (e.key === 'Enter') {
-    handleEnterKey(input, output);
+    if (input !== '') {
+      saveCommandToHistory(input);
+      executeCommand(input, output);
+    }
     e.target.value = '';
   } else if (e.key === 'ArrowUp') {
-    handleArrowUpKey(e.target);
+    navigateHistoryUp(e.target);
   } else if (e.key === 'ArrowDown') {
-    handleArrowDownKey(e.target);
+    navigateHistoryDown(e.target);
   }
 });
 
-// Display the initial prompt
-const displayPrompt = () => {
+function displayInitialPrompt() {
   const username = 'visitor'; // Replace with actual username
   const hostname = location.hostname; // Get the IP of the web page this is running on
   const directory = window.location.pathname; // Get the current path of the web page
-  document.getElementById(
-    'promptStart'
-  ).innerHTML = `[${username}@${hostname} ${directory}]$ `;
-};
+  const promptStartElement = document.getElementById('inputStart');
+  promptStartElement.innerHTML = `[${username}@${hostname} ${directory}]$ `;
 
-// Call the displayPrompt function when the page loads
-window.onload = displayPrompt;
+  inputField.style.width = `calc(100% - ${promptStartElement.offsetWidth}px)`;
+
+  // Make #cursor element always follow the text value end of the #inputField element
+  inputField.addEventListener('input', () => {
+    cursor.style.left = `${inputField.value.length * 1.205}ch`;
+  });
+
+  // Make cursor flash with white background when inputting is activated
+  inputField.addEventListener('focus', () => {
+    cursor.style.animation = 'blink 1.3s step-end infinite';
+  });
+
+  inputField.addEventListener('keydown', function (event) {
+    // 3. Check the event object
+    if (event.key === 'Enter') {
+      cursor.style.left = `0ch`;
+    }
+  });
+
+  // Stop cursor from flashing and remove white background when inputting is deactivated
+  inputField.addEventListener('blur', () => {
+    cursor.style.animation = '';
+  });
+}
+
+window.onload = displayInitialPrompt;
