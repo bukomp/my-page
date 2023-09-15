@@ -1,32 +1,47 @@
+// DOM Elements
 const inputField = document.getElementById('inputField');
 const terminal = document.getElementById('terminal');
 const cursor = document.getElementById('cursor');
 
+// Command History
 const getCommandHistory = () =>
   JSON.parse(localStorage.getItem('commandHistory')) || [];
-
 let commandHistory = getCommandHistory();
 let outputHistory = [];
 let historyIndex = commandHistory.length;
 
+// Commands
 const commands = {
   help: 'List of commands: help, clear, echo, exit',
-  clear: () => {
-    const outputList = document.getElementById('outputList');
-    outputList.innerHTML = '';
-    return 'Terminal cleared!';
-  },
-  echo: (input) => input,
-  exit: () => window.close(),
+  clear: clearTerminal,
+  echo: echoInput,
+  exit: exitWindow,
   '': '',
 };
 
+// Command Functions
+function clearTerminal() {
+  const outputList = document.getElementById('outputList');
+  outputList.innerHTML = '';
+  return 'Terminal cleared!';
+}
+
+function echoInput(input) {
+  return input;
+}
+
+function exitWindow() {
+  window.close();
+}
+
+// Command History Functions
 function saveCommandToHistory(input) {
   commandHistory.push(input);
   localStorage.setItem('commandHistory', JSON.stringify(commandHistory));
   historyIndex = commandHistory.length;
 }
 
+// Command Execution
 function executeCommand(input, output) {
   const inputElement = createNewElement('p', `$ ${input}`);
   let commandOutput = 'Command not found';
@@ -41,6 +56,7 @@ function executeCommand(input, output) {
   outputHistory.push(outputElement.textContent);
 }
 
+// DOM Manipulation
 function createNewElement(tag, text) {
   const element = document.createElement(tag);
   element.textContent = text;
@@ -52,6 +68,7 @@ function appendElementsToOutput(output, inputElement, outputElement) {
   output.appendChild(outputElement).classList.add('output');
 }
 
+// History Navigation
 function navigateHistoryUp(input) {
   if (historyIndex > 0) {
     historyIndex--;
@@ -72,48 +89,49 @@ function navigateHistoryDown(input) {
   }
 }
 
-inputField.addEventListener('keydown', (e) => {
+function handleKeyDown(e) {
   const input = e.target.value.trim();
   const output = document.getElementById('outputList');
 
   if (e.key === 'Enter') {
-    if (input !== '') {
-      saveCommandToHistory(input);
-      executeCommand(input, output);
-    } else {
-      executeCommand(input, output);
-    }
-    cursor.style.left = `0ch`;
-    e.target.value = '';
-    terminal.scrollTop = terminal.scrollHeight;
+    handleEnterKey(input, output, e);
   } else if (e.key === 'ArrowUp') {
-    e.preventDefault();
-    navigateHistoryUp(e.target);
-    cursor.style.left = `${inputField.value.length * 1.205}ch`;
+    handleArrowUpKey(e);
   } else if (e.key === 'ArrowDown') {
-    e.preventDefault();
-    navigateHistoryDown(e.target);
-    cursor.style.left = `${inputField.value.length * 1.205}ch`;
+    handleArrowDownKey(e);
   } else if (e.key === 'ArrowRight') {
     e.preventDefault();
-
-    //cursor.style.left =
-    //  inputField.value.length ===
-    //  Math.round(cursor.style.left.split('ch')[0] / 1.205)
-    //    ? cursor.style.left
-    //    : +cursor.style.left.split('ch')[0] + 1 * 1.205 + 'ch';
   } else if (e.key === 'ArrowLeft') {
     e.preventDefault();
-
-    //cursor.style.left =
-    //  inputField.value.length === 0 ||
-    //  +cursor.style.left.split('ch')[0] - 1 <= 0
-    //    ? cursor.style.left
-    //    : +cursor.style.left.split('ch')[0] - 1 * 1.205 + 'ch';
   }
-});
+}
 
-function displayInitialPrompt() {
+function handleEnterKey(input, output, e) {
+  if (input !== '') {
+    saveCommandToHistory(input);
+    executeCommand(input, output);
+  } else {
+    executeCommand(input, output);
+  }
+  cursor.style.left = `0ch`;
+  e.target.value = '';
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+function handleArrowUpKey(e) {
+  e.preventDefault();
+  navigateHistoryUp(e.target);
+  cursor.style.left = `${inputField.value.length * 1.205}ch`;
+}
+
+function handleArrowDownKey(e) {
+  e.preventDefault();
+  navigateHistoryDown(e.target);
+  cursor.style.left = `${inputField.value.length * 1.205}ch`;
+}
+
+// Initialization
+function initialize() {
   const username = 'visitor'; // Replace with actual username
   const hostname = location.hostname; // Get the IP of the web page this is running on
   const directory = window.location.pathname; // Get the current path of the web page
@@ -121,6 +139,9 @@ function displayInitialPrompt() {
   promptStartElement.innerHTML = `[${username}@${hostname} ${directory}]$ `;
 
   inputField.style.width = `calc(100% - ${promptStartElement.offsetWidth}px)`;
+
+  // Event Listeners
+  inputField.addEventListener('keydown', handleKeyDown);
 
   // Make #cursor element always follow the text value end of the #inputField element
   inputField.addEventListener('input', () => {
@@ -138,4 +159,5 @@ function displayInitialPrompt() {
   });
 }
 
-window.onload = displayInitialPrompt;
+// Window Load
+window.onload = initialize;
