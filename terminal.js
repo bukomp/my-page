@@ -161,19 +161,26 @@ function initialize() {
     cursor.style.left = `${inputField.value.length * 1.12}ch`;
   });
 
-  //// Make cursor flash with white background when inputting is activated
-  //inputField.addEventListener('focus', () => {
-  //  cursor.style.animation = 'none';
-  //});
-  //
-  //// Stop cursor from flashing and remove white background when inputting is deactivated
-  //inputField.addEventListener('blur', () => {
-  //  cursor.style.animation = 'blink 1.3s step-end infinite';
-  //});
-
   terminal.addEventListener('click', () => {
     inputField.focus();
   });
+
+  // script must go here
+  const outputList = document.getElementById('outputList');
+  // Add event listener to outputList
+  const observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      if (mutation.type == 'childList') {
+        outputList.scrollTop = outputList.scrollHeight;
+      }
+    });
+  });
+
+  // Configuration of the observer
+  const config = { attributes: true, childList: true, characterData: true };
+
+  // Pass in the target node, as well as the observer options
+  observer.observe(outputList, config);
 }
 
 // Window Load

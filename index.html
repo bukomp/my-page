@@ -43,30 +43,13 @@
         <p>Follow me on <a href="https://github.com/bukomp" target="_blank" style="color: #0F0;">GitHub</a></p>
     </footer>
 
-    <script>
-        // script must go here
-        const outputList = document.getElementById('outputList');
-        // Add event listener to outputList
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type == "childList") {
-                    outputList.scrollTop = outputList.scrollHeight;
-                }
-            });
-        });
-
-        // Configuration of the observer
-        const config = { attributes: true, childList: true, characterData: true };
-
-        // Pass in the target node, as well as the observer options
-        observer.observe(outputList, config);
-
-        
-        
-       
-        
-    </script>
     <script src="terminal.js"></script>
+    <!--<script src="midi.js"></script>-->
+    <script src='http://www.midijs.net/lib/midi.js'></script>
+    <script>
+        MIDIjs.volume = 20
+        MIDIjs.play('assets/music/the_beat.mid');
+    </script>
 
 </body>
 
