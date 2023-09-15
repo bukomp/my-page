@@ -1,12 +1,9 @@
-/* width */
-#terminalContainer ::-webkit-scrollbar,
-#terminal ::-webkit-scrollbar {
-  width: 10px;
+/* Scrollbar Styling */
+#terminalContainer ::-webkit-scrollbar {
+  width: 20px;
 }
 
-/* Track */
-#terminalContainer ::-webkit-scrollbar-track,
-#terminal ::-webkit-scrollbar-track {
+#terminalContainer ::-webkit-scrollbar-track {
   --dotSize: 0.05em;
   --bgSize: 0.3rem;
   --bgPosition: 0;
@@ -17,14 +14,22 @@
   );
   background-size: var(--bgSize) var(--bgSize);
   background-position: 0 0, var(--bgPosition) var(--bgPosition);
+  box-shadow: 0 0 1px white, 0px 0px 6px #ffffff;
 }
 
-/* Handle */
-#terminalContainer ::-webkit-scrollbar-thumb,
-#terminal ::-webkit-scrollbar-thumb {
+#terminalContainer ::-webkit-scrollbar-thumb {
   background: #0f0;
+  box-shadow: 0 0 1px white, 0px 0px 6px #ffffff;
 }
 
+/* Selection Styling */
+#terminalContainer ::selection {
+  background-color: #0f0;
+  color: #000;
+  box-shadow: 0 0 1px white, 0px 0px 6px #ffffff;
+}
+
+/* Terminal Styling */
 #terminal {
   width: 100%;
   height: 90vh;
@@ -32,19 +37,21 @@
   padding: 0;
   text-shadow: 0 0 1px white, 0px 0px 6px #ffffff;
   font-family: 'VT323', monospace;
+  font-size: 1.7rem;
   letter-spacing: 1.3px;
   cursor: url(cursor-min.png) 9 9, auto;
 }
 
+/* Input Line Styling */
 #inputLine {
   white-space: nowrap;
   display: block;
   text-overflow: ellipsis;
   caret-color: transparent;
   letter-spacing: inherit;
-  letter-spacing: inherit;
 }
 
+/* Input Field Styling */
 #inputField:hover {
   cursor: url(cursor-min-text.png) 13 18, auto;
 }
@@ -65,23 +72,27 @@
   cursor: url(cursor-min.png) 9 9, auto;
 }
 
+/* Output List Styling */
 #outputList .input {
   margin: 10px 0 0 0;
 }
+
 #outputList .output {
   margin: 0 0 10px 0;
 }
 
+/* Cursor Styling */
 #cursor {
   position: relative;
-  width: 6px;
-  height: 0.92rem;
+  width: 8px;
+  height: 1.35rem;
   box-shadow: 0 0 1px white, 0px 0px 6px #ffffff;
-  transform: translate(177.5px, -31px);
+  /*transform: translate(-7.5px, -12px);*/
   background-color: #00ff00;
   animation: blink 1.3s step-end infinite;
 }
 
+/* Animation Keyframes */
 @keyframes blink {
   0% {
     opacity: 0;

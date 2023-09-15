@@ -121,13 +121,19 @@ function handleEnterKey(input, output, e) {
 function handleArrowUpKey(e) {
   e.preventDefault();
   navigateHistoryUp(e.target);
-  cursor.style.left = `${inputField.value.length * 1.205}ch`;
+  cursor.style.left = `${inputField.value.length * 1.12}ch`;
 }
 
 function handleArrowDownKey(e) {
   e.preventDefault();
   navigateHistoryDown(e.target);
-  cursor.style.left = `${inputField.value.length * 1.205}ch`;
+  cursor.style.left = `${inputField.value.length * 1.12}ch`;
+}
+
+function setCursorInitialPosition() {
+  const { left, bottom } = inputField.getBoundingClientRect();
+  console.log(left, bottom);
+  cursor.style.transform = `translate(${left + 1}px, ${bottom - 66}px)`;
 }
 
 // Initialization
@@ -139,13 +145,14 @@ function initialize() {
   promptStartElement.innerHTML = `[${username}@${hostname} ${directory}]$ `;
 
   inputField.style.width = `calc(100% - ${promptStartElement.offsetWidth}px)`;
+  setCursorInitialPosition();
 
   // Event Listeners
   inputField.addEventListener('keydown', handleKeyDown);
 
   // Make #cursor element always follow the text value end of the #inputField element
   inputField.addEventListener('input', () => {
-    cursor.style.left = `${inputField.value.length * 1.205}ch`;
+    cursor.style.left = `${inputField.value.length * 1.12}ch`;
   });
 
   // Make cursor flash with white background when inputting is activated
