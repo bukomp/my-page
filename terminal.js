@@ -1,4 +1,5 @@
 const inputField = document.getElementById('inputField');
+const terminal = document.getElementById('terminal');
 const cursor = document.getElementById('cursor');
 
 const getCommandHistory = () =>
@@ -10,9 +11,14 @@ let historyIndex = commandHistory.length;
 
 const commands = {
   help: 'List of commands: help, clear, echo, exit',
-  clear: '',
+  clear: () => {
+    const outputList = document.getElementById('outputList');
+    outputList.innerHTML = '';
+    return 'Terminal cleared!';
+  },
   echo: (input) => input,
   exit: () => window.close(),
+  '': '',
 };
 
 function saveCommandToHistory(input) {
@@ -49,14 +55,18 @@ function appendElementsToOutput(output, inputElement, outputElement) {
 function navigateHistoryUp(input) {
   if (historyIndex > 0) {
     historyIndex--;
-    input.value = commandHistory[historyIndex];
+    const value = commandHistory[historyIndex];
+    input.value = value;
+    input.setSelectionRange(value.length, value.length);
   }
 }
 
 function navigateHistoryDown(input) {
   if (historyIndex < commandHistory.length - 1) {
     historyIndex++;
-    input.value = commandHistory[historyIndex];
+    const value = commandHistory[historyIndex];
+    input.value = value;
+    input.setSelectionRange(value.length, value.length);
   } else {
     input.value = '';
   }
@@ -70,12 +80,36 @@ inputField.addEventListener('keydown', (e) => {
     if (input !== '') {
       saveCommandToHistory(input);
       executeCommand(input, output);
+    } else {
+      executeCommand(input, output);
     }
+    cursor.style.left = `0ch`;
     e.target.value = '';
+    terminal.scrollTop = terminal.scrollHeight;
   } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
     navigateHistoryUp(e.target);
+    cursor.style.left = `${inputField.value.length * 1.205}ch`;
   } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
     navigateHistoryDown(e.target);
+    cursor.style.left = `${inputField.value.length * 1.205}ch`;
+  } else if (e.key === 'ArrowRight') {
+    e.preventDefault();
+
+    //cursor.style.left =
+    //  inputField.value.length ===
+    //  Math.round(cursor.style.left.split('ch')[0] / 1.205)
+    //    ? cursor.style.left
+    //    : +cursor.style.left.split('ch')[0] + 1 * 1.205 + 'ch';
+  } else if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+
+    //cursor.style.left =
+    //  inputField.value.length === 0 ||
+    //  +cursor.style.left.split('ch')[0] - 1 <= 0
+    //    ? cursor.style.left
+    //    : +cursor.style.left.split('ch')[0] - 1 * 1.205 + 'ch';
   }
 });
 
@@ -95,19 +129,12 @@ function displayInitialPrompt() {
 
   // Make cursor flash with white background when inputting is activated
   inputField.addEventListener('focus', () => {
-    cursor.style.animation = 'blink 1.3s step-end infinite';
-  });
-
-  inputField.addEventListener('keydown', function (event) {
-    // 3. Check the event object
-    if (event.key === 'Enter') {
-      cursor.style.left = `0ch`;
-    }
+    cursor.style.animation = 'none';
   });
 
   // Stop cursor from flashing and remove white background when inputting is deactivated
   inputField.addEventListener('blur', () => {
-    cursor.style.animation = '';
+    cursor.style.animation = 'blink 1.3s step-end infinite';
   });
 }
 

@@ -26,14 +26,17 @@
     </style>
 </head>
 <body>
-    <div id="terminal">
-        <p id="outputList"></p>
-        <div id="inputLine">
-            <span id="inputStart"></span>
-            <input id="inputField" type="text" list="commands" autofocus>
-            <div id="cursor"></div>
+    <div  id="terminalContainer">
+        <div id="terminal">
+            <div id="outputList"></div>
+            <div id="inputLine">
+                <span id="inputStart"></span>
+                <input id="inputField" type="text" list="commands" autofocus>
+                <div id="cursor"></div>
+            </div>
         </div>
     </div>
+    
     <div id="api-playground" style="display: none;"></div>
     <div id="server-status" style="display: none;"></div>
     <footer style="color: #0F0;">
@@ -64,6 +67,7 @@
         
     </script>
     <script src="terminal.js"></script>
+
 </body>
 
 </html>
