@@ -59,7 +59,6 @@ function executeCommand(input, output) {
 
   const outputElement = createNewElement('p', commandOutput);
   appendElementsToOutput(output, inputElement, outputElement);
-  outputHistory.push(outputElement.textContent);
 }
 
 // DOM Manipulation
@@ -182,6 +181,3 @@ function initialize() {
   // Pass in the target node, as well as the observer options
   observer.observe(outputList, config);
 }
-
-// Window Load
-window.onload = initialize;

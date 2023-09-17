@@ -127,8 +127,8 @@ const Terminal = () => {
         <div id="outputList">
           {outputHistory.map((ioCombination, index) => (
             <div key={index}>
-              <p>$ {ioCombination.input}</p>
-              <pre>{ioCombination.output}</pre>
+              <p className={'input'}>$ {ioCombination.input}</p>
+              <pre className={'output'}>{ioCombination.output}</pre>
             </div>
           ))}
         </div>
