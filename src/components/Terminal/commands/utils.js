@@ -10,9 +10,11 @@ export const exitWindow = () => {
 };
 
 export const help = () => {
-  return `List of commands:\n - ${Object.keys(commandDeclarations)
-    .slice(1)
-    .join('\n - ')}`;
+  return (
+    <pre>{`List of commands:\n - ${Object.keys(commandDeclarations)
+      .slice(1)
+      .join('\n - ')}`}</pre>
+  );
 };
 
 export const clearTerminal = (dispatch) => {
