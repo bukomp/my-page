@@ -1,23 +1,12 @@
-import ClearTerminal from './clearTerminal';
+import { me } from './me';
+import { help, clearTerminal, echoInput, exitWindow } from './utils';
 
-const echoInput = (dispatch, ...input) => {
-  return input.join(' ');
-};
-
-const exitWindow = () => {
-  window.close();
-};
-
-const help = () => {
-  return 'List of commands: help, clear, echo, exit';
-};
-// Commands
 const commandDeclarations = {
   help,
-  clear: ClearTerminal,
+  clear: clearTerminal,
   echo: echoInput,
   exit: exitWindow,
-  '': () => '',
+  me: me,
 };
 
 export default commandDeclarations;

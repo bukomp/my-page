@@ -54,6 +54,10 @@ const Terminal = () => {
 
   // Command Execution
   function executeCommand(input) {
+    if (input === '') {
+      return dispatch(saveToOutputHistory({ input: '', output: '' }));
+    }
+
     let output = 'Command not found';
 
     const commandInput = input.split(' ')[0];
@@ -128,7 +132,7 @@ const Terminal = () => {
           {outputHistory.map((ioCombination, index) => (
             <div key={index}>
               <p className={'input'}>$ {ioCombination.input}</p>
-              <pre className={'output'}>{ioCombination.output}</pre>
+              <div className={'output'}>{ioCombination.output}</div>
             </div>
           ))}
         </div>
