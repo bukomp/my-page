@@ -57,11 +57,12 @@
 }
 
 /* Input Field Styling */
-#inputField:hover {
+#inputLine:hover {
   cursor: url(../../assets/img/cursor-min-text.png) 13 18, auto;
 }
 
 #inputField {
+  cursor: inherit;
   outline: none;
   color: #0f0;
   border: none;

@@ -7,24 +7,17 @@ import {
   setInitialCommandHistory,
 } from '../../reducers/commandReducer';
 import { saveToOutputHistory } from '../../reducers/outputReducer';
+import { setInitialState } from '../../reducers/appsListReducer';
 
 import TerminalInput from './components/Input';
 import TerminalOutput from './components/Output';
 
-// Custom hook for focus management
-const useFocus = () => {
-  const htmlElRef = useRef(null);
-  const setFocus = () => {
-    htmlElRef.current?.focus();
-  };
-  return [htmlElRef, setFocus];
-};
-
 const Terminal = () => {
   const dispatch = useDispatch();
-  const [inputRef, setInputFocus] = useFocus();
+  const inputLineRef = useRef(null);
   const commandHistory = useSelector((state) => state.commandHistory);
   const outputHistory = useSelector((state) => state.outputHistory);
+  const openAppList = useSelector((state) => state.listOfAppsOpen);
   const [historyIndex, setHistoryIndex] = useState(commandHistory.length);
   const [currentInputValue, setCurrentInputValue] = useState('');
   const username = 'visitor';
@@ -34,6 +27,7 @@ const Terminal = () => {
   // Initialize command history on component mount
   useEffect(() => {
     dispatch(setInitialCommandHistory());
+    dispatch(setInitialState());
   }, [dispatch]);
 
   // Update history index when command history changes
@@ -43,8 +37,8 @@ const Terminal = () => {
 
   // Scroll to the latest command output
   useEffect(() => {
-    inputRef.current.scrollIntoView();
-  }, [outputHistory, inputRef]);
+    inputLineRef.current.scrollIntoView();
+  }, [outputHistory, inputLineRef]);
 
   // Save command to history and update history index
   const saveCommandToHistory = (input) => {
@@ -85,6 +79,9 @@ const Terminal = () => {
       setHistoryIndex(historyIndex + 1);
       setCurrentInputValue(value);
     } else {
+      if (historyIndex === commandHistory.length - 1) {
+        setHistoryIndex(historyIndex + 1);
+      }
       setCurrentInputValue('');
     }
   };
@@ -124,27 +121,26 @@ const Terminal = () => {
     setCurrentInputValue('');
   };
 
-  const handleOnClick = () => {
-    setInputFocus();
-  };
-
   const handleOnChange = (e) => {
     setCurrentInputValue(e?.target?.value || '');
   };
 
   return (
     <div id="terminal">
-      <div id="container" onClick={handleOnClick}>
+      <div id="container">
         <TerminalOutput outputHistory={outputHistory} />
-        <TerminalInput
-          inputRef={inputRef}
-          handleKeyDown={handleKeyDown}
-          currentInputValue={currentInputValue}
-          handleOnChange={handleOnChange}
-          username={username}
-          hostname={hostname}
-          directory={directory}
-        />
+        <div ref={inputLineRef}>
+          <TerminalInput
+            handleKeyDown={handleKeyDown}
+            currentInputValue={currentInputValue}
+            handleOnChange={handleOnChange}
+            username={username}
+            hostname={hostname}
+            directory={directory}
+          />
+        </div>
+
+        {openAppList.map((app) => app.component)}
       </div>
     </div>
   );

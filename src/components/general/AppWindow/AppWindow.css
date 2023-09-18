@@ -1,0 +1,67 @@
+.app-window {
+  background-color: #000;
+  border: 1px solid #0f0;
+  box-shadow: 3px 3px 1px #0d0, 0 0 1px white, 0px 0px 6px #ffffff;
+  font-family: inherit;
+}
+
+.app-window-header {
+  display: flex;
+  background-color: #0f0;
+  color: #000;
+  padding: 10px;
+  font-family: inherit;
+}
+
+.app-window-content {
+  overflow: auto;
+  min-width: 100%;
+  padding: 10px;
+  color: inherit;
+  background-color: #000;
+  font-family: inherit;
+}
+
+.app-window-close-button {
+  position: absolute;
+  right: 1rem;
+  width: fit-content;
+  background-color: #000;
+  color: #0f0;
+  border: 3px outset #0f0;
+  outline: 2px solid #000;
+  text-align: center;
+  align-self: center;
+  font-family: inherit;
+  font-size: 1.2rem;
+  user-select: none;
+  text-shadow: 0 0 1px white, 0px 0px 6px #ffffff;
+  box-shadow: 0 0 1px white, 0px 0px 6px #ffffff;
+}
+.app-window-close-button:active {
+  background-color: #0f0;
+  color: #000;
+}
+
+.app-window-resize-handle {
+  background-color: #000;
+  border: solid 1px #0f0;
+
+  color: #000;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 20px;
+  width: 20px;
+  font-family: inherit;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.app-window-resize-handle span {
+  right: 0.1rem;
+  font-family: inherit;
+  font-size: 1.2rem;
+  position: absolute;
+  transform: rotate(45deg);
+}
