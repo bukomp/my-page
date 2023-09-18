@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AppWindow.css';
 import { useDispatch } from 'react-redux';
-import { removeFromAppsList } from '../../../reducers/appsListReducer';
+import { removeFromAppsList } from '../../reducers/appsListReducer';
 
 const AppWindow = ({ appName, AppComponent }) => {
   const dispatch = useDispatch();

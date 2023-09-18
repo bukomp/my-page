@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import AppWindow from '../components/general/AppWindow/AppWindow';
+import AppWindow from '../components/AppWindow/AppWindow';
 
 const initialState = [];
 
