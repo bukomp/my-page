@@ -2,7 +2,8 @@ import { me } from './me';
 import { help, clearTerminal, echoInput, exitWindow } from './utils';
 
 const commandDeclarations = {
-  help,
+  help, //! must aways comefirst
+
   clear: clearTerminal,
   echo: echoInput,
   exit: exitWindow,

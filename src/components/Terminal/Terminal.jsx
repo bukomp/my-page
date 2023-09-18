@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './terminal.css';
-
 import commandDeclarations from './commands/commandDeclarations';
 import {
   saveToCommandHistory,
@@ -9,81 +8,77 @@ import {
 } from '../../reducers/commandReducer';
 import { saveToOutputHistory } from '../../reducers/outputReducer';
 
+import TerminalInput from './components/Input';
+import TerminalOutput from './components/Output';
+
+// Custom hook for focus management
 const useFocus = () => {
   const htmlElRef = useRef(null);
   const setFocus = () => {
-    htmlElRef.current && htmlElRef.current.focus();
+    htmlElRef.current?.focus();
   };
-
   return [htmlElRef, setFocus];
 };
 
 const Terminal = () => {
   const dispatch = useDispatch();
-
-  // DOM Elements
   const [inputRef, setInputFocus] = useFocus();
-
-  // Command History
   const commandHistory = useSelector((state) => state.commandHistory);
   const outputHistory = useSelector((state) => state.outputHistory);
   const [historyIndex, setHistoryIndex] = useState(commandHistory.length);
   const [currentInputValue, setCurrentInputValue] = useState('');
-
   const username = 'visitor';
   const hostname = window.location.host;
   const directory = window.location.pathname;
 
+  // Initialize command history on component mount
   useEffect(() => {
     dispatch(setInitialCommandHistory());
   }, [dispatch]);
 
+  // Update history index when command history changes
   useEffect(() => {
     setHistoryIndex(commandHistory.length);
   }, [commandHistory]);
 
+  // Scroll to the latest command output
   useEffect(() => {
     inputRef.current.scrollIntoView();
   }, [outputHistory, inputRef]);
 
-  // Command History Functions
-  function saveCommandToHistory(input) {
+  // Save command to history and update history index
+  const saveCommandToHistory = (input) => {
     dispatch(saveToCommandHistory(input));
     setHistoryIndex(commandHistory.length);
-  }
+  };
 
-  // Command Execution
-  function executeCommand(input) {
+  // Execute command and save output to history
+  const executeCommand = (input) => {
     if (input === '') {
       return dispatch(saveToOutputHistory({ input: '', output: '' }));
     }
-
     let output = 'Command not found';
-
-    const commandInput = input.split(' ')[0];
-    const properties = input.split(' ');
-
+    const [commandInput, ...properties] = input.split(' ');
     if (commandDeclarations.hasOwnProperty(commandInput)) {
-      properties.shift();
       const command = commandDeclarations[commandInput];
       output = command(dispatch, ...properties);
     }
-
     if (output !== '**clear**')
       dispatch(saveToOutputHistory({ input, output }));
-  }
+  };
 
-  // History Navigation
-  function navigateHistoryUp(e) {
+  // Navigate command history up
+  const navigateHistoryUp = (e) => {
     if (historyIndex > 0) {
       const value = commandHistory[historyIndex - 1];
       e.target.setSelectionRange(value.length, value.length);
       setHistoryIndex(historyIndex - 1);
       setCurrentInputValue(value);
     }
-  }
+  };
 
-  function navigateHistoryDown(e) {
+  // Navigate command history down
+  const navigateHistoryDown = (e) => {
     if (historyIndex < commandHistory.length - 1) {
       const value = commandHistory[historyIndex + 1];
       e.target.setSelectionRange(value.length, value.length);
@@ -92,25 +87,34 @@ const Terminal = () => {
     } else {
       setCurrentInputValue('');
     }
-  }
+  };
 
-  function handleKeyDown(e) {
+  // Handle key down events
+  const handleKeyDown = (e) => {
     const input = e.target.value.trim();
-
-    if (e.key === 'Enter') {
-      handleEnterKey(input);
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      navigateHistoryUp(e);
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      navigateHistoryDown(e);
-    } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-      e.preventDefault();
+    switch (e.key) {
+      case 'Enter':
+        handleEnterKey(input);
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        navigateHistoryUp(e);
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        navigateHistoryDown(e);
+        break;
+      case 'ArrowRight':
+      case 'ArrowLeft':
+        e.preventDefault();
+        break;
+      default:
+        break;
     }
-  }
+  };
 
-  function handleEnterKey(input) {
+  // Handle enter key press
+  const handleEnterKey = (input) => {
     if (input !== '') {
       saveCommandToHistory(input);
       executeCommand(input);
@@ -118,45 +122,29 @@ const Terminal = () => {
       executeCommand(input);
     }
     setCurrentInputValue('');
-  }
+  };
+
+  const handleOnClick = () => {
+    setInputFocus();
+  };
+
+  const handleOnChange = (e) => {
+    setCurrentInputValue(e?.target?.value || '');
+  };
 
   return (
-    <div
-      id="terminalContainer"
-      onClick={() => {
-        setInputFocus();
-      }}
-    >
-      <div id="terminal">
-        <div id="outputList">
-          {outputHistory.map((ioCombination, index) => (
-            <div key={index}>
-              <p className={'input'}>$ {ioCombination.input}</p>
-              <div className={'output'}>{ioCombination.output}</div>
-            </div>
-          ))}
-        </div>
-        <div id="inputLine">
-          <span id="inputStart">
-            {`[${username}@${hostname} ${directory}]$ `}
-          </span>
-          <input
-            id="inputField"
-            ref={inputRef}
-            type="text"
-            spellCheck="false"
-            autoFocus
-            onKeyDown={handleKeyDown}
-            value={currentInputValue}
-            style={{
-              width: `${(currentInputValue?.length || 0) * 1.12}ch`,
-            }}
-            onChange={(e) => {
-              setCurrentInputValue(e?.target?.value || '');
-            }}
-          />
-          <div id="cursor"></div>
-        </div>
+    <div id="terminal">
+      <div id="container" onClick={handleOnClick}>
+        <TerminalOutput outputHistory={outputHistory} />
+        <TerminalInput
+          inputRef={inputRef}
+          handleKeyDown={handleKeyDown}
+          currentInputValue={currentInputValue}
+          handleOnChange={handleOnChange}
+          username={username}
+          hostname={hostname}
+          directory={directory}
+        />
       </div>
     </div>
   );
