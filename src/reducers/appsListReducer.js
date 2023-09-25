@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import AppWindow from '../components/AppWindow/AppWindow';
+import MidiPlayer from '../components/Terminal/apps/MidiPlayer/MidiPlayer';
 
 const initialState = [];
 
@@ -19,14 +19,8 @@ const appsListSlice = createSlice({
     setInitialState: (state, action) => {
       return [
         {
-          appName: 'template',
-          component: (
-            <AppWindow
-              key={'template'}
-              appName={'template'}
-              AppComponent={'This is template APP'}
-            />
-          ),
+          appName: 'Midi Player',
+          component: <MidiPlayer key={'Midi Player'} />,
         },
       ];
     },

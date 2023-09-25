@@ -44,7 +44,7 @@
 
   font-size: 1.7rem;
   letter-spacing: 1.3px;
-  cursor: url(../../assets/img/cursor-min.png) 9 9, auto;
+  cursor: url('./img/cursor-min.png') 9 9, auto;
 }
 
 /* Input Line Styling */
@@ -58,7 +58,7 @@
 
 /* Input Field Styling */
 #inputLine:hover {
-  cursor: url(../../assets/img/cursor-min-text.png) 13 18, auto;
+  cursor: url('./img/cursor-min-text.png') 13 18, auto;
 }
 
 #inputField {
@@ -76,7 +76,7 @@
   text-emphasis: none;
   text-decoration: none;
   width: fit-content;
-  cursor: url(../../assets/img/cursor-min.png) 9 9, auto;
+  cursor: url('./img/cursor-min.png') 9 9, auto;
 }
 
 /* Output List Styling */

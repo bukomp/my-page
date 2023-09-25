@@ -25,7 +25,7 @@
 .app-window-close-button {
   position: absolute;
   right: 1rem;
-  width: fit-content;
+  width: 1.5rem;
   background-color: #000;
   color: #0f0;
   border: 3px outset #0f0;

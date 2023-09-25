@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 !(function (t) {
   try {
     (t.MIDIjs = new Object()), (t.MIDIjs.initError = 'initializing ...');
@@ -989,4 +991,3 @@
   }
   var fe, ge, Ie, be, Me, we;
 })(this);
-//# sourceMappingURL=https://midijs.intern.scorio.com/lib/midi.js.map
